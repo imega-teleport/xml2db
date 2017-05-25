@@ -1,0 +1,1117 @@
+﻿<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="cml" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="cml">
+	<xsd:element name="ПакетПредложений">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element minOccurs="0" name="Ид" type="tns:ИдентфикаторГлобальныйТип"/>
+				<xsd:element name="Наименование" type="tns:НаименованиеТип"/>
+				<xsd:element name="ИдКаталога" type="tns:ИдентфикаторГлобальныйТип"/>
+				<xsd:element minOccurs="0" name="ИдКлассификатора" type="tns:ИдентфикаторГлобальныйТип"/>
+				<xsd:element minOccurs="0" name="ДействительноС" type="tns:ДатаТип"/>
+				<xsd:element minOccurs="0" name="ДействительноДо" type="tns:ДатаТип"/>
+				<xsd:element minOccurs="0" name="Описание" type="tns:КомментарийТип"/>
+				<xsd:element name="Владелец" type="tns:Контрагент"/>
+				<xsd:element name="ТипыЦен">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element minOccurs="0" name="ИдКлассификатора" type="tns:ИдентфикаторГлобальныйТип"/>
+							<xsd:element maxOccurs="unbounded" name="ТипЦены" type="tns:ТипЦены"/>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element minOccurs="0" name="ЗначенияСвойств">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element maxOccurs="unbounded" name="ЗначенияСвойства" type="tns:ЗначенияСвойства"/>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="Предложения">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element maxOccurs="unbounded" name="Предложение">
+								<xsd:complexType>
+									<xsd:complexContent>
+										<xsd:extension base="tns:Товар">
+											<xsd:sequence>
+												<xsd:element name="Цены">
+													<xsd:complexType>
+														<xsd:sequence>
+															<xsd:element maxOccurs="unbounded" name="Цена" type="tns:Цена"/>
+														</xsd:sequence>
+													</xsd:complexType>
+												</xsd:element>
+												<xsd:element minOccurs="0" name="Количество" type="tns:КоличествоТип"/>
+											</xsd:sequence>
+										</xsd:extension>
+									</xsd:complexContent>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+			<xsd:attribute name="СодержитТолькоИзменения" type="tns:ПереключательТип"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="Каталог">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="Ид" type="tns:ИдентфикаторГлобальныйТип"/>
+				<xsd:element minOccurs="0" name="ИдКлассификатора" type="tns:ИдентфикаторГлобальныйТип"/>
+				<xsd:element name="Наименование" type="tns:НаименованиеТип"/>
+				<xsd:element name="Владелец" type="tns:Контрагент"/>
+				<xsd:element name="Товары">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element maxOccurs="unbounded" name="Товар" type="tns:Товар"/>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element minOccurs="0" name="Описание" type="tns:КомментарийТип"/>
+			</xsd:sequence>
+			<xsd:attribute name="СодержитТолькоИзменения" type="tns:ПереключательТип"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="Документ">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="Ид" type="tns:ИдентфикаторГлобальныйТип"/>
+				<xsd:element name="Номер" type="tns:НомерТип"/>
+				<xsd:element name="Дата" type="tns:ДатаТип"/>
+				<xsd:element name="ХозОперация" type="tns:ХозОперацияТип"/>
+				<xsd:element name="Роль" type="tns:РольТип"/>
+				<xsd:element name="Валюта" type="tns:ВалютаТип"/>
+				<xsd:element name="Курс" type="tns:КоэффициентТип"/>
+				<xsd:element name="Сумма" type="tns:СуммаТип"/>
+				<xsd:element name="Контрагенты">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element maxOccurs="unbounded" name="Контрагент">
+								<xsd:complexType>
+									<xsd:complexContent>
+										<xsd:extension base="tns:Контрагент">
+											<xsd:choice>
+												<xsd:element name="Роль" type="tns:РольТип"/>
+												<xsd:element minOccurs="0" name="РасчетныйСчет" type="tns:РасчетныйСчет"/>
+												<xsd:element minOccurs="0" name="Склад" type="tns:Склад"/>
+											</xsd:choice>
+										</xsd:extension>
+									</xsd:complexContent>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element minOccurs="0" name="Время" type="tns:ВремяТип"/>
+				<xsd:element minOccurs="0" name="СрокПлатежа" type="tns:ДатаТип"/>
+				<xsd:element minOccurs="0" name="Комментарий" type="tns:КомментарийТип"/>
+				<xsd:element minOccurs="0" name="Налоги">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element maxOccurs="unbounded" name="Налог">
+								<xsd:complexType>
+									<xsd:complexContent>
+										<xsd:extension base="tns:Налог">
+											<xsd:sequence>
+												<xsd:element name="Сумма" type="tns:СуммаТип"/>
+												<xsd:element minOccurs="0" name="Ставка" type="tns:КоэффициентТип"/>
+											</xsd:sequence>
+										</xsd:extension>
+									</xsd:complexContent>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element minOccurs="0" name="Скидки">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element maxOccurs="unbounded" name="Скидка" type="tns:Скидка"/>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element minOccurs="0" name="ДопРасходы">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element maxOccurs="unbounded" name="ДопРасход" type="tns:ДопРасход"/>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element minOccurs="0" name="Товары">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element maxOccurs="unbounded" name="Товар">
+								<xsd:complexType>
+									<xsd:complexContent>
+										<xsd:extension base="tns:Товар">
+											<xsd:sequence>
+												<xsd:element minOccurs="0" name="ИдКаталога" type="tns:ИдентфикаторГлобальныйТип"/>
+												<xsd:element minOccurs="0" name="ИдКлассификатора" type="tns:ИдентфикаторГлобальныйТип"/>
+												<xsd:element minOccurs="0" name="ЦенаЗаЕдиницу" type="tns:СуммаТип"/>
+												<xsd:element minOccurs="0" name="Количество" type="tns:КоличествоТип"/>
+												<xsd:element minOccurs="0" name="Сумма" type="tns:СуммаТип"/>
+												<xsd:element minOccurs="0" name="Единица" type="tns:ЕдиницаТип"/>
+												<xsd:element minOccurs="0" name="Коэффициент" type="tns:КоэффициентТип"/>
+												<xsd:element minOccurs="0" name="ДополнительныеДанные">
+													<xsd:complexType>
+														<xsd:sequence>
+															<xsd:element maxOccurs="unbounded" name="ЗначениеРеквизита" type="tns:ЗначениеРеквизита"/>
+														</xsd:sequence>
+													</xsd:complexType>
+												</xsd:element>
+												<xsd:element minOccurs="0" name="СтранаПроисхождения" type="tns:СтрокаТип"/>
+												<xsd:element minOccurs="0" name="ГТД" type="tns:СтрокаТип"/>
+												<xsd:element minOccurs="0" name="Налоги">
+													<xsd:complexType>
+														<xsd:sequence>
+															<xsd:element maxOccurs="unbounded" name="Налог">
+																<xsd:complexType>
+																	<xsd:complexContent>
+																		<xsd:extension base="tns:Налог">
+																			<xsd:sequence>
+																				<xsd:element name="Сумма" type="tns:СуммаТип"/>
+																				<xsd:element minOccurs="0" name="Ставка" type="tns:КоэффициентТип"/>
+																			</xsd:sequence>
+																		</xsd:extension>
+																	</xsd:complexContent>
+																</xsd:complexType>
+															</xsd:element>
+														</xsd:sequence>
+													</xsd:complexType>
+												</xsd:element>
+												<xsd:element minOccurs="0" name="Скидки">
+													<xsd:complexType>
+														<xsd:sequence>
+															<xsd:element maxOccurs="unbounded" name="Скидка">
+																<xsd:complexType>
+																	<xsd:complexContent>
+																		<xsd:extension base="tns:Скидка"/>
+																	</xsd:complexContent>
+																</xsd:complexType>
+															</xsd:element>
+														</xsd:sequence>
+													</xsd:complexType>
+												</xsd:element>
+												<xsd:element minOccurs="0" name="ДопРасходы">
+													<xsd:complexType>
+														<xsd:sequence>
+															<xsd:element maxOccurs="unbounded" name="ДопРасход" type="tns:ДопРасход"/>
+														</xsd:sequence>
+													</xsd:complexType>
+												</xsd:element>
+												<xsd:element minOccurs="0" name="ДополнительныеЗначенияРеквизитов">
+													<xsd:complexType>
+														<xsd:sequence>
+															<xsd:element maxOccurs="unbounded" name="ЗначениеРеквизита" type="tns:ЗначениеРеквизита"/>
+														</xsd:sequence>
+													</xsd:complexType>
+												</xsd:element>
+											</xsd:sequence>
+										</xsd:extension>
+									</xsd:complexContent>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element minOccurs="0" name="ЗначенияРеквизитов">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element maxOccurs="unbounded" name="ЗначениеРеквизита" type="tns:ЗначениеРеквизита"/>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="Классификатор">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="Ид" type="tns:ИдентфикаторГлобальныйТип"/>
+				<xsd:element name="Наименование" type="tns:НаименованиеТип"/>
+				<xsd:element name="Владелец" type="tns:Контрагент"/>
+				<xsd:element minOccurs="0" name="Описание" type="tns:КомментарийТип"/>
+				<xsd:element minOccurs="0" name="Группы">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element maxOccurs="unbounded" name="Группа" type="tns:Группа"/>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element minOccurs="0" name="Свойства">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element maxOccurs="unbounded" name="Свойство" type="tns:Свойство"/>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element minOccurs="0" name="ТипыЦен">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element maxOccurs="unbounded" name="ТипЦены" type="tns:ТипЦены"/>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name="КоммерческаяИнформация">
+		<xsd:complexType>
+			<xsd:choice>
+				<xsd:element minOccurs="0" name="Классификатор">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="Ид" type="tns:ИдентфикаторГлобальныйТип"/>
+							<xsd:element name="Наименование" type="tns:НаименованиеТип"/>
+							<xsd:element name="Владелец" type="tns:Контрагент"/>
+							<xsd:element minOccurs="0" name="Описание" type="tns:КомментарийТип"/>
+							<xsd:element minOccurs="0" name="Группы">
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element maxOccurs="unbounded" name="Группа" type="tns:Группа"/>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element minOccurs="0" name="Свойства">
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element maxOccurs="unbounded" name="Свойство" type="tns:Свойство"/>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element minOccurs="0" name="ТипыЦен">
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element maxOccurs="unbounded" name="ТипЦены" type="tns:ТипЦены"/>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element minOccurs="0" name="Каталог">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="Ид" type="tns:ИдентфикаторГлобальныйТип"/>
+							<xsd:element minOccurs="0" name="ИдКлассификатора" type="tns:ИдентфикаторГлобальныйТип"/>
+							<xsd:element name="Наименование" type="tns:НаименованиеТип"/>
+							<xsd:element name="Владелец" type="tns:Контрагент"/>
+							<xsd:element name="Товары">
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element maxOccurs="unbounded" name="Товар" type="tns:Товар"/>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element minOccurs="0" name="Описание" type="tns:КомментарийТип"/>
+						</xsd:sequence>
+						<xsd:attribute name="СодержитТолькоИзменения" type="tns:ПереключательТип"/>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element minOccurs="0" name="ПакетПредложений">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element minOccurs="0" name="Ид" type="tns:ИдентфикаторГлобальныйТип"/>
+							<xsd:element name="Наименование" type="tns:НаименованиеТип"/>
+							<xsd:element name="ИдКаталога" type="tns:ИдентфикаторГлобальныйТип"/>
+							<xsd:element minOccurs="0" name="ИдКлассификатора" type="tns:ИдентфикаторГлобальныйТип"/>
+							<xsd:element minOccurs="0" name="ДействительноС" type="tns:ДатаТип"/>
+							<xsd:element minOccurs="0" name="ДействительноДо" type="tns:ДатаТип"/>
+							<xsd:element minOccurs="0" name="Описание" type="tns:КомментарийТип"/>
+							<xsd:element name="Владелец" type="tns:Контрагент"/>
+							<xsd:element name="ТипыЦен">
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element minOccurs="0" name="ИдКлассификатора" type="tns:ИдентфикаторГлобальныйТип"/>
+										<xsd:element maxOccurs="unbounded" name="ТипЦены" type="tns:ТипЦены"/>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element minOccurs="0" name="ЗначенияСвойств">
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element maxOccurs="unbounded" name="ЗначенияСвойства" type="tns:ЗначенияСвойства"/>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="Предложения">
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element maxOccurs="unbounded" name="Предложение">
+											<xsd:complexType>
+												<xsd:complexContent>
+													<xsd:extension base="tns:Товар">
+														<xsd:sequence>
+															<xsd:element name="Цены">
+																<xsd:complexType>
+																	<xsd:sequence>
+																		<xsd:element maxOccurs="unbounded" name="Цена" type="tns:Цена"/>
+																	</xsd:sequence>
+																</xsd:complexType>
+															</xsd:element>
+															<xsd:element minOccurs="0" name="Количество" type="tns:КоличествоТип"/>
+														</xsd:sequence>
+													</xsd:extension>
+												</xsd:complexContent>
+											</xsd:complexType>
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:sequence>
+						<xsd:attribute name="СодержитТолькоИзменения" type="tns:ПереключательТип"/>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element maxOccurs="unbounded" minOccurs="0" name="Документ">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="Ид" type="tns:ИдентфикаторГлобальныйТип"/>
+							<xsd:element name="Номер" type="tns:НомерТип"/>
+							<xsd:element name="Дата" type="tns:ДатаТип"/>
+							<xsd:element name="ХозОперация" type="tns:ХозОперацияТип"/>
+							<xsd:element name="Роль" type="tns:РольТип"/>
+							<xsd:element name="Валюта" type="tns:ВалютаТип"/>
+							<xsd:element name="Курс" type="tns:КоэффициентТип"/>
+							<xsd:element name="Сумма" type="tns:СуммаТип"/>
+							<xsd:element name="Контрагенты">
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element maxOccurs="unbounded" name="Контрагент">
+											<xsd:complexType>
+												<xsd:complexContent>
+													<xsd:extension base="tns:Контрагент">
+														<xsd:choice>
+															<xsd:element name="Роль" type="tns:РольТип"/>
+															<xsd:element minOccurs="0" name="РасчетныйСчет" type="tns:РасчетныйСчет"/>
+															<xsd:element minOccurs="0" name="Склад" type="tns:Склад"/>
+														</xsd:choice>
+													</xsd:extension>
+												</xsd:complexContent>
+											</xsd:complexType>
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element minOccurs="0" name="Время" type="tns:ВремяТип"/>
+							<xsd:element minOccurs="0" name="СрокПлатежа" type="tns:ДатаТип"/>
+							<xsd:element minOccurs="0" name="Комментарий" type="tns:КомментарийТип"/>
+							<xsd:element minOccurs="0" name="Налоги">
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element maxOccurs="unbounded" name="Налог">
+											<xsd:complexType>
+												<xsd:complexContent>
+													<xsd:extension base="tns:Налог">
+														<xsd:sequence>
+															<xsd:element name="Сумма" type="tns:СуммаТип"/>
+															<xsd:element minOccurs="0" name="Ставка" type="tns:КоэффициентТип"/>
+														</xsd:sequence>
+													</xsd:extension>
+												</xsd:complexContent>
+											</xsd:complexType>
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element minOccurs="0" name="Скидки">
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element maxOccurs="unbounded" name="Скидка" type="tns:Скидка"/>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element minOccurs="0" name="ДопРасходы">
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element maxOccurs="unbounded" name="ДопРасход" type="tns:ДопРасход"/>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element minOccurs="0" name="Товары">
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element maxOccurs="unbounded" name="Товар">
+											<xsd:complexType>
+												<xsd:complexContent>
+													<xsd:extension base="tns:Товар">
+														<xsd:sequence>
+															<xsd:element minOccurs="0" name="ИдКаталога" type="tns:ИдентфикаторГлобальныйТип"/>
+															<xsd:element minOccurs="0" name="ИдКлассификатора" type="tns:ИдентфикаторГлобальныйТип"/>
+															<xsd:element minOccurs="0" name="ЦенаЗаЕдиницу" type="tns:СуммаТип"/>
+															<xsd:element minOccurs="0" name="Количество" type="tns:КоличествоТип"/>
+															<xsd:element minOccurs="0" name="Сумма" type="tns:СуммаТип"/>
+															<xsd:element minOccurs="0" name="Единица" type="tns:ЕдиницаТип"/>
+															<xsd:element minOccurs="0" name="Коэффициент" type="tns:КоэффициентТип"/>
+															<xsd:element minOccurs="0" name="ДополнительныеДанные">
+																<xsd:complexType>
+																	<xsd:sequence>
+																		<xsd:element maxOccurs="unbounded" name="ЗначениеРеквизита" type="tns:ЗначениеРеквизита"/>
+																	</xsd:sequence>
+																</xsd:complexType>
+															</xsd:element>
+															<xsd:element minOccurs="0" name="СтранаПроисхождения" type="tns:СтрокаТип"/>
+															<xsd:element minOccurs="0" name="ГТД" type="tns:СтрокаТип"/>
+															<xsd:element minOccurs="0" name="Налоги">
+																<xsd:complexType>
+																	<xsd:sequence>
+																		<xsd:element maxOccurs="unbounded" name="Налог">
+																			<xsd:complexType>
+																				<xsd:complexContent>
+																					<xsd:extension base="tns:Налог">
+																						<xsd:sequence>
+																							<xsd:element name="Сумма" type="tns:СуммаТип"/>
+																							<xsd:element minOccurs="0" name="Ставка" type="tns:КоэффициентТип"/>
+																						</xsd:sequence>
+																					</xsd:extension>
+																				</xsd:complexContent>
+																			</xsd:complexType>
+																		</xsd:element>
+																	</xsd:sequence>
+																</xsd:complexType>
+															</xsd:element>
+															<xsd:element minOccurs="0" name="Скидки">
+																<xsd:complexType>
+																	<xsd:sequence>
+																		<xsd:element maxOccurs="unbounded" name="Скидка">
+																			<xsd:complexType>
+																				<xsd:complexContent>
+																					<xsd:extension base="tns:Скидка"/>
+																				</xsd:complexContent>
+																			</xsd:complexType>
+																		</xsd:element>
+																	</xsd:sequence>
+																</xsd:complexType>
+															</xsd:element>
+															<xsd:element minOccurs="0" name="ДопРасходы">
+																<xsd:complexType>
+																	<xsd:sequence>
+																		<xsd:element maxOccurs="unbounded" name="ДопРасход" type="tns:ДопРасход"/>
+																	</xsd:sequence>
+																</xsd:complexType>
+															</xsd:element>
+															<xsd:element minOccurs="0" name="ДополнительныеЗначенияРеквизитов">
+																<xsd:complexType>
+																	<xsd:sequence>
+																		<xsd:element maxOccurs="unbounded" name="ЗначениеРеквизита" type="tns:ЗначениеРеквизита"/>
+																	</xsd:sequence>
+																</xsd:complexType>
+															</xsd:element>
+														</xsd:sequence>
+													</xsd:extension>
+												</xsd:complexContent>
+											</xsd:complexType>
+										</xsd:element>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element minOccurs="0" name="ЗначенияРеквизитов">
+								<xsd:complexType>
+									<xsd:sequence>
+										<xsd:element maxOccurs="unbounded" name="ЗначениеРеквизита" type="tns:ЗначениеРеквизита"/>
+									</xsd:sequence>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:choice>
+			<xsd:attribute name="ВерсияСхемы" type="xsd:string" use="required"/>
+			<xsd:attribute name="ДатаФормирования" type="tns:ДатаВремяТип" use="required"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:complexType name="Адрес">
+		<xsd:sequence>
+			<xsd:element name="Представление" type="tns:НаименованиеТип"/>
+			<xsd:element minOccurs="0" name="Комментарий">
+				<xsd:simpleType>
+					<xsd:restriction base="tns:КомментарийТип"/>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element maxOccurs="10" minOccurs="0" name="АдресноеПоле">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="Тип" type="tns:АдресТип"/>
+						<xsd:element name="Значение" type="tns:СтрокаТип"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:simpleType name="АдресТип">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="Почтовый индекс"/>
+			<xsd:enumeration value="Страна"/>
+			<xsd:enumeration value="Регион"/>
+			<xsd:enumeration value="Район"/>
+			<xsd:enumeration value="Населенный пункт"/>
+			<xsd:enumeration value="Город"/>
+			<xsd:enumeration value="Улица"/>
+			<xsd:enumeration value="Дом"/>
+			<xsd:enumeration value="Корпус"/>
+			<xsd:enumeration value="Квартира"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="АртикулТип">
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="БИКТип">
+		<xsd:restriction base="xsd:string">
+			<xsd:length value="9"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="Банк">
+		<xsd:choice>
+			<xsd:element minOccurs="0" name="СчетКорреспондентский" type="tns:СчетНомерТип"/>
+			<xsd:element minOccurs="0" name="Наименование" type="tns:НаименованиеТип"/>
+			<xsd:element minOccurs="0" name="Адрес">
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="tns:Адрес"/>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element minOccurs="0" name="Контакты" type="tns:КонтактнаяИнформация"/>
+			<xsd:element name="БИК" type="tns:БИКТип"/>
+			<xsd:element name="SWIFT" type="xsd:string"/>
+		</xsd:choice>
+	</xsd:complexType>
+	<xsd:simpleType name="ВалютаТип">
+		<xsd:restriction base="xsd:string">
+			<xsd:length value="3"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="ВидДеятельностиТип">
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="ВремяТип">
+		<xsd:restriction base="xsd:time"/>
+	</xsd:simpleType>
+	<xsd:complexType name="Группа">
+		<xsd:sequence>
+			<xsd:element name="Ид" type="tns:ИдентфикаторГлобальныйТип"/>
+			<xsd:element name="Наименование" type="tns:КомментарийТип"/>
+			<xsd:element minOccurs="0" name="Описание" type="tns:КомментарийТип"/>
+			<xsd:element minOccurs="0" name="Свойства">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="unbounded" name="Свойство" type="tns:Свойство"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element minOccurs="0" name="Группы">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="unbounded" name="Группа" type="tns:Группа"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:simpleType name="ДатаВремяТип">
+		<xsd:restriction base="xsd:dateTime"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="ДатаТип">
+		<xsd:restriction base="xsd:date"/>
+	</xsd:simpleType>
+	<xsd:complexType name="ДопРасход">
+		<xsd:sequence>
+			<xsd:element name="Наименование" type="tns:НаименованиеТип"/>
+			<xsd:element name="Сумма" type="tns:СуммаТип"/>
+			<xsd:element minOccurs="0" name="Процент" type="tns:КоэффициентТип"/>
+			<xsd:element minOccurs="0" name="УчтеноВСумме" type="tns:ПереключательТип"/>
+			<xsd:element minOccurs="0" name="Комментарий" type="tns:КомментарийТип"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:simpleType name="ЕГРПОТип">
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="ЕдиницаТип">
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:complexType name="ЗначениеРеквизита">
+		<xsd:sequence>
+			<xsd:element name="Наименование" type="tns:НаименованиеТип"/>
+			<xsd:element maxOccurs="unbounded" name="Значение" type="tns:ЗначениеТип"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:simpleType name="ЗначениеТип">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="1"/>
+			<xsd:maxLength value="1000"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="ЗначенияСвойства">
+		<xsd:sequence>
+			<xsd:element name="Ид" type="tns:ИдентфикаторГлобальныйТип"/>
+			<xsd:element minOccurs="0" name="Наименование" type="tns:НаименованиеТип"/>
+			<xsd:element maxOccurs="unbounded" name="Значение" type="tns:ЗначениеТип"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:simpleType name="ИННТип">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="10"/>
+			<xsd:maxLength value="12"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="Идентификатор80">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="80"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="ИдентфикаторГлобальныйТип">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="1"/>
+			<xsd:maxLength value="40"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="ИдентфикаторТип">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="1"/>
+			<xsd:maxLength value="20"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="ИмяФайлаТип">
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="КППТип">
+		<xsd:restriction base="xsd:string">
+			<xsd:length value="9"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="КоличествоТип">
+		<xsd:restriction base="xsd:decimal"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="КомментарийТип">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="1"/>
+			<xsd:maxLength value="3000"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="КонтактТип">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="1"/>
+			<xsd:maxLength value="100"/>
+			<xsd:enumeration value="Телефон внутренний"/>
+			<xsd:enumeration value="Телефон рабочий"/>
+			<xsd:enumeration value="Телефон мобильный"/>
+			<xsd:enumeration value="Телефон домашний"/>
+			<xsd:enumeration value="Пейджер"/>
+			<xsd:enumeration value="Факс"/>
+			<xsd:enumeration value="Почта"/>
+			<xsd:enumeration value="ICQ"/>
+			<xsd:enumeration value="ВебСайт"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="КонтактнаяИнформация">
+		<xsd:sequence>
+			<xsd:element maxOccurs="unbounded" name="Контакт">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="Тип" type="tns:КонтактТип"/>
+						<xsd:element name="Значение" type="tns:СтрокаТип"/>
+						<xsd:element minOccurs="0" name="Комментарий" type="tns:КомментарийТип"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="Контрагент">
+		<xsd:choice>
+			<xsd:element minOccurs="0" name="Ид" type="tns:ИдентфикаторГлобальныйТип"/>
+			<xsd:element minOccurs="0" name="Наименование" type="tns:НаименованиеТип"/>
+			<xsd:element name="ОфициальноеНаименование" type="tns:НаименованиеТип"/>
+			<xsd:element minOccurs="0" name="ЮридическийАдрес" type="tns:Адрес"/>
+			<xsd:element minOccurs="0" name="ИНН" type="tns:ИННТип"/>
+			<xsd:element minOccurs="0" name="КПП" type="tns:КППТип"/>
+			<xsd:element minOccurs="0" name="ОсновнойВидДеятельности" type="tns:НаименованиеТип"/>
+			<xsd:element minOccurs="0" name="ЕГРПО" type="tns:ЕГРПОТип"/>
+			<xsd:element minOccurs="0" name="ОКВЭД" type="tns:ОКВЭДТип"/>
+			<xsd:element minOccurs="0" name="ОКДП" type="tns:ОКДПТип"/>
+			<xsd:element minOccurs="0" name="ОКОПФ" type="tns:ОКОПФТип"/>
+			<xsd:element minOccurs="0" name="ОКФС" type="tns:ОКФСТип"/>
+			<xsd:element minOccurs="0" name="ОКПО" type="tns:ОКПОТип"/>
+			<xsd:element minOccurs="0" name="ДатаРегистрации" type="tns:ДатаТип"/>
+			<xsd:element minOccurs="0" name="Руководитель" type="tns:Контрагент"/>
+			<xsd:element minOccurs="0" name="РасчетныеСчета">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="unbounded" name="РасчетныйСчет" type="tns:РасчетныйСчет"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="ПолноеНаименование" type="tns:НаименованиеТип"/>
+			<xsd:element minOccurs="0" name="Обращение" type="tns:ОбращениеТип"/>
+			<xsd:element minOccurs="0" name="Фамилия" type="tns:СтрокаТип"/>
+			<xsd:element minOccurs="0" name="Имя" type="tns:СтрокаТип"/>
+			<xsd:element minOccurs="0" name="Отчество" type="tns:СтрокаТип"/>
+			<xsd:element minOccurs="0" name="ДатаРождения" type="tns:ДатаТип"/>
+			<xsd:element minOccurs="0" name="МестоРождения" type="tns:Адрес"/>
+			<xsd:element minOccurs="0" name="Пол" type="tns:ПолТип"/>
+			<xsd:element minOccurs="0" name="УдостоверениеЛичности">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="ВидДокумента" type="tns:СтрокаТип"/>
+						<xsd:element minOccurs="0" name="Серия" type="tns:СтрокаТип"/>
+						<xsd:element name="Номер" type="tns:НомерТип"/>
+						<xsd:element name="ДатаВыдачи" type="tns:ДатаТип"/>
+						<xsd:element name="КемВыдан" type="tns:НаименованиеТип"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element minOccurs="0" name="АдресРегистрации" type="tns:Адрес"/>
+			<xsd:element minOccurs="0" name="Организация" type="tns:Контрагент"/>
+			<xsd:element minOccurs="0" name="Должность" type="tns:СтрокаТип"/>
+			<xsd:element minOccurs="0" name="Комментарий" type="tns:КомментарийТип"/>
+			<xsd:element minOccurs="0" name="Адрес" type="tns:Адрес"/>
+			<xsd:element minOccurs="0" name="Контакты" type="tns:КонтактнаяИнформация"/>
+			<xsd:element minOccurs="0" name="Представители">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="unbounded" name="Представитель">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="Отношение" type="xsd:string"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:choice>
+	</xsd:complexType>
+	<xsd:simpleType name="КоэффициентТип">
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="НаименованиеТип">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="1"/>
+			<xsd:maxLength value="250"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="Налог">
+		<xsd:sequence>
+			<xsd:element name="Наименование" type="tns:НаименованиеТип"/>
+			<xsd:element minOccurs="0" name="УчтеноВСумме" type="tns:ПереключательТип"/>
+			<xsd:element minOccurs="0" name="Акциз" type="tns:ПереключательТип"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:simpleType name="НомерТип">
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="ОКВЭДТип">
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="ОКДПТип">
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="ОКОПФТип">
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="ОКПОТип">
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="ОКФСТип">
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="ОбращениеТип">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="1"/>
+			<xsd:enumeration value="товарищ"/>
+			<xsd:enumeration value="гражданин"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="ОбязательностьСвойствТип">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="Для каталога"/>
+			<xsd:enumeration value="Для документа"/>
+			<xsd:enumeration value="Для предложений"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="ПереключательТип">
+		<xsd:restriction base="xsd:boolean"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="ПолТип">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="М"/>
+			<xsd:enumeration value="Ж"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="РасчетныйСчет">
+		<xsd:sequence>
+			<xsd:element name="НомерСчета" type="tns:СчетНомерТип"/>
+			<xsd:element name="Банк" type="tns:Банк"/>
+			<xsd:element minOccurs="0" name="БанкКорреспондент" type="tns:Банк"/>
+			<xsd:element minOccurs="0" name="Комментарий" type="tns:КомментарийТип"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:simpleType name="РольТип">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="Продавец"/>
+			<xsd:enumeration value="Покупатель"/>
+			<xsd:enumeration value="Плательщик"/>
+			<xsd:enumeration value="Получатель"/>
+			<xsd:enumeration value="Комитент"/>
+			<xsd:enumeration value="Комиссионер"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="СВИФТТип">
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:complexType name="Свойство">
+		<xsd:choice>
+			<xsd:element name="Ид" type="tns:ИдентфикаторГлобальныйТип"/>
+			<xsd:element name="Наименование" type="tns:НаименованиеТип"/>
+			<xsd:element minOccurs="0" name="Описание" type="tns:КомментарийТип"/>
+			<xsd:element minOccurs="0" name="Обязательное" type="tns:ОбязательностьСвойствТип"/>
+			<xsd:element minOccurs="0" name="Множественное" type="tns:ПереключательТип"/>
+			<xsd:element minOccurs="0" name="ТипЗначений" type="tns:ТипЗначенийТип"/>
+			<xsd:element minOccurs="0" name="ВариантыЗначений">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="unbounded" name="Значение" type="tns:ЗначениеТип"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element minOccurs="0" name="ДляТоваров" type="tns:ПереключательТип"/>
+			<xsd:element minOccurs="0" name="ДляПредложений" type="tns:ПереключательТип"/>
+			<xsd:element minOccurs="0" name="ДляДокументов" type="tns:ПереключательТип"/>
+		</xsd:choice>
+	</xsd:complexType>
+	<xsd:complexType name="Скидка">
+		<xsd:sequence>
+			<xsd:element name="Наименование" type="tns:НаименованиеТип"/>
+			<xsd:element name="Сумма" type="tns:СуммаТип"/>
+			<xsd:element minOccurs="0" name="Процент" type="tns:КоэффициентТип"/>
+			<xsd:element minOccurs="0" name="УчтеноВСумме" type="tns:ПереключательТип"/>
+			<xsd:element minOccurs="0" name="Комментарий" type="tns:КомментарийТип"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="Склад">
+		<xsd:sequence>
+			<xsd:element name="Ид" type="tns:ИдентфикаторГлобальныйТип"/>
+			<xsd:element name="Наименование" type="tns:НаименованиеТип"/>
+			<xsd:element minOccurs="0" name="Комментарий" type="tns:КомментарийТип"/>
+			<xsd:element minOccurs="0" name="Адрес" type="tns:Адрес"/>
+			<xsd:element minOccurs="0" name="Контакты" type="tns:КонтактнаяИнформация"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:simpleType name="СтатусТип">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="Новый"/>
+			<xsd:enumeration value="Изменен"/>
+			<xsd:enumeration value="Удален"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="Строка3">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="1"/>
+			<xsd:maxLength value="3"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="СтрокаТип">
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="СуммаТип">
+		<xsd:restriction base="xsd:decimal">
+			<xsd:totalDigits value="18"/>
+			<xsd:fractionDigits value="2"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="СчетНомерТип">
+		<xsd:restriction base="xsd:string">
+			<xsd:length value="20"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="ТипЗначенийТип">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="Строка"/>
+			<xsd:enumeration value="Число"/>
+			<xsd:enumeration value="Время"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="ТипЦены">
+		<xsd:sequence>
+			<xsd:element name="Ид" type="tns:ИдентфикаторГлобальныйТип"/>
+			<xsd:element minOccurs="0" name="Наименование" type="tns:НаименованиеТип"/>
+			<xsd:element minOccurs="0" name="Валюта" type="tns:ВалютаТип"/>
+			<xsd:element minOccurs="0" name="Описание" type="tns:КомментарийТип"/>
+			<xsd:element maxOccurs="unbounded" minOccurs="0" name="Налог">
+				<xsd:complexType>
+					<xsd:complexContent>
+						<xsd:extension base="tns:Налог"/>
+					</xsd:complexContent>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="Товар">
+		<xsd:sequence>
+			<xsd:element minOccurs="0" name="Ид" type="tns:Идентификатор80"/>
+			<xsd:element minOccurs="0" name="Штрихкод" type="tns:ШтрихкодТип"/>
+			<xsd:element minOccurs="0" name="Артикул" type="tns:АртикулТип"/>
+			<xsd:element name="Наименование" type="tns:НаименованиеТип"/>
+			<xsd:element name="БазоваяЕдиница">
+				<xsd:complexType mixed="true">
+					<xsd:sequence>
+						<xsd:element maxOccurs="unbounded" minOccurs="0" name="Пересчет">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element minOccurs="0" name="Единица" type="tns:ЕдиницаТип"/>
+									<xsd:element minOccurs="0" name="Коэффициент" type="tns:КоэффициентТип"/>
+									<xsd:element minOccurs="0" name="ДополнительныеДанные"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+					<xsd:attribute name="Код" type="tns:Строка3"/>
+					<xsd:attribute name="НаименованиеПолное" type="tns:СтрокаТип"/>
+					<xsd:attribute name="МеждународноеСокращение" type="tns:Строка3"/>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element minOccurs="0" name="ИдТовараУКонтрагента" type="tns:ИдентфикаторГлобальныйТип"/>
+			<xsd:element minOccurs="0" name="Группы">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="unbounded" name="Ид" type="tns:ИдентфикаторГлобальныйТип"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element minOccurs="0" name="Описание" type="tns:СтрокаТип"/>
+			<xsd:element maxOccurs="unbounded" minOccurs="0" name="Картинка" type="tns:ИмяФайлаТип"/>
+			<xsd:element minOccurs="0" name="Страна" type="tns:СтрокаТип"/>
+			<xsd:element minOccurs="0" name="ТорговаяМарка" type="tns:СтрокаТип"/>
+			<xsd:element minOccurs="0" name="ВладелецТорговойМарки" type="tns:Контрагент"/>
+			<xsd:element minOccurs="0" name="Изготовитель" type="tns:Контрагент"/>
+			<xsd:element minOccurs="0" name="ЗначенияСвойств">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="unbounded" name="ЗначенияСвойства" type="tns:ЗначенияСвойства"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element minOccurs="0" name="СтавкиНалогов">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="unbounded" name="СтавкаНалога">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="Наименование" type="tns:СтрокаТип"/>
+									<xsd:element name="Ставка" type="tns:КоэффициентТип"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element minOccurs="0" name="Акцизы">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="unbounded" name="Акциз">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="Наименование" type="tns:НаименованиеТип"/>
+									<xsd:element name="СуммаЗаЕдиницу" type="tns:СуммаТип"/>
+									<xsd:element name="Валюта" type="tns:ВалютаТип"/>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element minOccurs="0" name="Комплектующие">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="unbounded" name="Комплектующее">
+							<xsd:complexType>
+								<xsd:complexContent>
+									<xsd:extension base="tns:Товар">
+										<xsd:sequence>
+											<xsd:element minOccurs="0" name="ИдКаталога" type="tns:ИдентфикаторГлобальныйТип"/>
+											<xsd:element minOccurs="0" name="ИдКлассификатора" type="tns:ИдентфикаторГлобальныйТип"/>
+											<xsd:element name="Количество" type="tns:КоличествоТип"/>
+										</xsd:sequence>
+									</xsd:extension>
+								</xsd:complexContent>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element minOccurs="0" name="Аналоги">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="unbounded" name="Аналог">
+							<xsd:complexType>
+								<xsd:complexContent>
+									<xsd:extension base="tns:Товар">
+										<xsd:sequence>
+											<xsd:element minOccurs="0" name="ИдКаталога" type="tns:ИдентфикаторГлобальныйТип"/>
+											<xsd:element minOccurs="0" name="ИдКлассификатора" type="tns:ИдентфикаторГлобальныйТип"/>
+										</xsd:sequence>
+									</xsd:extension>
+								</xsd:complexContent>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element minOccurs="0" name="ХарактеристикиТовара" type="tns:ХарактеристикиТовара"/>
+			<xsd:element minOccurs="0" name="ЗначенияРеквизитов">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="unbounded" name="ЗначениеРеквизита" type="tns:ЗначениеРеквизита"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute name="Статус" type="tns:СтатусТип"/>
+	</xsd:complexType>
+	<xsd:complexType name="ХарактеристикиТовара">
+		<xsd:sequence>
+			<xsd:element maxOccurs="unbounded" name="ХарактеристикаТовара">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="Наименование" type="tns:НаименованиеТип"/>
+						<xsd:element name="Значение" type="tns:ЗначениеТип"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:simpleType name="ХозОперацияТип">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="Заказ товара"/>
+			<xsd:enumeration value="Счет на оплату"/>
+			<xsd:enumeration value="Отпуск товара"/>
+			<xsd:enumeration value="Счет-фактура"/>
+			<xsd:enumeration value="Возврат товара"/>
+			<xsd:enumeration value="Передача товара на комиссию"/>
+			<xsd:enumeration value="Возврат комиссионного товара"/>
+			<xsd:enumeration value="Отчет о продажах комиссионного товара"/>
+			<xsd:enumeration value="Выплата наличных денег"/>
+			<xsd:enumeration value="Возврат наличных денег"/>
+			<xsd:enumeration value="Выплата безналичных денег"/>
+			<xsd:enumeration value="Возврат безналичных денег"/>
+			<xsd:enumeration value="Переоценка товаров"/>
+			<xsd:enumeration value="Прочие"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="Цена">
+		<xsd:sequence>
+			<xsd:element minOccurs="0" name="Представление" type="tns:НаименованиеТип"/>
+			<xsd:element name="ИдТипаЦены" type="tns:ИдентфикаторГлобальныйТип"/>
+			<xsd:element name="ЦенаЗаЕдиницу" type="tns:СуммаТип"/>
+			<xsd:element minOccurs="0" name="Валюта" type="tns:ВалютаТип"/>
+			<xsd:element minOccurs="0" name="Единица" type="tns:ЕдиницаТип"/>
+			<xsd:element minOccurs="0" name="Коэффициент" type="tns:КоэффициентТип"/>
+			<xsd:element minOccurs="0" name="ДополнительныеДанные"/>
+			<xsd:element minOccurs="0" name="МинКоличество" type="tns:КоличествоТип"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:simpleType name="ШтрихкодТип">
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="8"/>
+			<xsd:maxLength value="14"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+</xsd:schema>
