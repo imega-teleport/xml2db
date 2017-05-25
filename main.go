@@ -32,33 +32,35 @@ func main() {
 		os.Exit(1)
 	}
 
-	host := ""
-	dsn := fmt.Sprintf("%s", host)
+    user, pass, host, dbname := "root", "", "10.0.3.90:3306", "teleport"
+	dsn := fmt.Sprintf("mysql://%s:%s@tcp(%s)/%s", user, pass, host, dbname)
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {
 		fmt.Printf("error: %v", err)
 		os.Exit(1)
 	}
+    err = db.Ping()
+    if err != nil {
+        fmt.Printf("error: %v", err)
+        os.Exit(1)
+    }
+    defer func() {
+        err := db.Close()
+        if err != nil {
+            fmt.Printf("error: %v", err)
+            return
+        }
+        fmt.Println("Closed db connection")
+    }()
 
-	account := &account.Account{
+	acc := &account.Account{
 		ID: "123",
 	}
-	storage := mysql.NewStorage204(db, account)
+	storage := mysql.NewStorage204(db, acc)
 	parser := v204.NewParser204(storage)
-	parser.Parse(b1)
-
+	err = parser.Parse(b1)
+    if err != nil {
+        fmt.Printf("error: %v", err)
+        os.Exit(1)
+    }
 }
-
-/*
-func (g Group) createGroup(parentId string) {
-	fmt.Println(parentId, g.Name)
-
-	if len(g.Groups) == 0 {
-		return
-	}
-
-	for _, c := range g.Groups {
-		c.createGroup(g.Id)
-	}
-}
-*/

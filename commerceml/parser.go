@@ -44,11 +44,3 @@ type Parser interface {
 	CreateGroup(group Group) (err error)
 	Parse(data []byte) (err error)
 }
-
-func test() {
-	g := Group{
-		IdName: IdName{
-			Id: "",
-		},
-	}
-}
