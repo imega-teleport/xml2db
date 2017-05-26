@@ -1,0 +1,11 @@
+language: go
+
+go:
+  - 1.7.x
+
+install:
+  - go get -u gopkg.in/alecthomas/gometalinter.v1
+  - gometalinter --install
+
+script:
+  - gometalinter ./...
