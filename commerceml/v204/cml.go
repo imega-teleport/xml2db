@@ -2,6 +2,7 @@ package v204
 
 import (
 	"encoding/xml"
+
 	"github.com/imega-teleport/xml2db/commerceml"
 )
 
@@ -43,9 +44,22 @@ type IdName struct {
 
 type Property struct {
 	IdName
-	Type string `xml:"ТипЗначений"`
 	Description
+	Type            string          `xml:"ТипЗначений"`
+	RequireProperty RequireProperty `xml:"Обязательное"`
+	Multiple        bool            `xml:"Множественное"`
+	ForDocument     bool            `xml:"ДляДокументов"`
+	ForOffer        bool            `xml:"ДляПредложений"`
+	ForCatalog      bool            `xml:"ДляТоваров"`
 }
+
+type RequireProperty int
+
+const (
+	CATALOG  RequireProperty = iota
+	DOCUMENT
+	OFFER
+)
 
 type Description struct {
 	Value string `xml:"Описание"`
@@ -63,6 +77,10 @@ func (p parser) Parse(data []byte) (err error) {
 
 	for _, g := range cml.Classifier.Groups {
 		p.CreateGroup("", g)
+	}
+
+	for _, i := range cml.Classifier.Properties {
+		p.CreateProperty(i)
 	}
 
 	return
@@ -83,6 +101,18 @@ func (p parser) CreateGroup(parentId string, group Group) (err error) {
 	for _, g := range group.Groups {
 		err = p.CreateGroup(group.Id, g)
 	}
+
+	return
+}
+
+func (p parser) CreateProperty(property Property) (err error) {
+	err = p.storage.CreateProperty(commerceml.Property{
+		IdName: commerceml.IdName{
+			Id:   property.Id,
+			Name: property.Name,
+		},
+		Type: commerceml.Property{}.Type.Get(property.Type),
+	})
 
 	return
 }

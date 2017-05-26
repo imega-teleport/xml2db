@@ -5,3 +5,7 @@ db:
 		--link xml2db_db:s \
 		imega/mysql-client \
     	mysql --host=s -e "source /sql/schema.sql"
+
+clean:
+	@-docker stop xml2db_db
+	@-docker rm -fv xml2db_db

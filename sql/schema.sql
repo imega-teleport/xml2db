@@ -11,3 +11,11 @@ CREATE TABLE groups (
   name      VARCHAR(3000),
   KEY record(client_id, id, parent_id)
 );
+
+create table properties (
+  client_id VARCHAR(36) NOT NULL,
+  id        VARCHAR(36) NOT NULL,
+  name      VARCHAR(3000),
+  type      VARCHAR(3000),
+  KEY record(client_id, id)
+);
