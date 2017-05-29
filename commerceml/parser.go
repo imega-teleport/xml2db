@@ -1,5 +1,14 @@
 package commerceml
 
+import "net/url"
+
+type Parser interface {
+	CreateGroup(group Group) (err error)
+	CreateProperty(property Property) (err error)
+	CreateProduct(product Product) (err error)
+	Parse(data []byte) (err error)
+}
+
 type CommerceML struct {
 	Classifier Classifier
 }
@@ -26,8 +35,8 @@ type Owner struct {
 }
 
 type IdName struct {
-	Id   string
-	Name string
+	Id   string `json:"id"`
+	Name string `json:"name"`
 }
 
 type Property struct {
@@ -94,8 +103,53 @@ type Description struct {
 	Value string
 }
 
-type Parser interface {
-	CreateGroup(group Group) (err error)
-	CreateProperty(property Property) (err error)
-	Parse(data []byte) (err error)
+type Catalog struct {
+	IdName
+	Classifier Classifier
+	Owner      Owner
+	Products   []Product
+}
+
+type Product struct {
+	IdName
+	Description
+	BarCode      string
+	Article      string
+	Unit         Unit
+	FullName     string
+	Groups       []Group
+	Image        url.URL
+	Properties   []IdValue
+	Taxes        []Tax
+	Requisites   []Requisite
+	Country      string
+	Brand        string
+	OwnerBrand   string
+	Manufacturer Contractor
+	Excises      []Excise
+}
+
+type Contractor struct {
+	IdName
+	Title    string
+	FullName string
+}
+
+type Excise struct {
+	Name string
+}
+
+type Requisite struct {
+	Name  string
+	Value string
+}
+
+type Tax struct {
+	Name string
+	Rate int
+}
+
+type Unit struct {
+	Name string
+	Code int
 }

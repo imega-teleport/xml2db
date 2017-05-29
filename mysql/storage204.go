@@ -3,6 +3,8 @@ package mysql
 import (
 	"database/sql"
 
+	"encoding/json"
+
 	"github.com/imega-teleport/xml2db/account"
 	"github.com/imega-teleport/xml2db/commerceml"
 )
@@ -51,6 +53,24 @@ func (s storage) CreateProperty(property commerceml.Property) (err error) {
 	}()
 
 	err = tx.CreateProperty(s.account.ID, property)
+
+	return
+}
+
+func (s storage) CreateProduct(product commerceml.Product) (err error) {
+	tx, err := s.db.Begin()
+	if err != nil {
+		return
+	}
+	defer func() {
+		if err != nil {
+			tx.Rollback()
+			return
+		}
+		err = tx.Commit()
+	}()
+
+	err = tx.CreateProduct(s.account.ID, product)
 
 	return
 }
@@ -104,6 +124,40 @@ func (tx *Tx) CreateProperty(account string, property commerceml.Property) (err 
 	}()
 
 	_, err = stmt.Exec(account, property.Id, property.Name, property.Type)
+	if err != nil {
+		return
+	}
+
+	return
+}
+
+func (tx *Tx) CreateProduct(account string, product commerceml.Product) (err error) {
+	stmt, err := tx.Prepare("INSERT products(client_id,id,name,groups) VALUES (?,?,?,?)")
+	if err != nil {
+		return
+	}
+	defer func() {
+		err = stmt.Close()
+		if err != nil {
+			return
+		}
+	}()
+	var groups []struct {
+		ID string `json:"id"`
+	}
+	for _, i := range product.Groups {
+		s := struct {
+			ID string `json:"id"`
+		}{
+			ID: i.Id,
+		}
+		groups = append(groups, s)
+	}
+	groupsJson, err := json.Marshal(groups)
+	if err != nil {
+		return
+	}
+	_, err = stmt.Exec(account, product.Id, product.Name, groupsJson)
 	if err != nil {
 		return
 	}

@@ -32,7 +32,7 @@ func main() {
 		os.Exit(1)
 	}
 
-    user, pass, host, dbname := "root", "", "10.0.3.90:3306", "teleport"
+    user, pass, host, dbname := "root", "", "10.0.3.94:3306", "teleport"
 	dsn := fmt.Sprintf("mysql://%s:%s@tcp(%s)/%s", user, pass, host, dbname)
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {

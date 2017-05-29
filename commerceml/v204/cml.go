@@ -14,6 +14,7 @@ type CommerceML struct {
 	CommerceInfo xml.Name   `xml:"КоммерческаяИнформация"`
 	Version      string     `xml:"ВерсияСхемы,attr"`
 	Classifier   Classifier `xml:"Классификатор"`
+	Catalog      Catalog    `xml:"Каталог"`
 }
 
 type Group struct {
@@ -42,6 +43,10 @@ type IdName struct {
 	Name string `xml:"Наименование"`
 }
 
+/*func (in IdName) MarshalJSON() ([]byte, error) {
+	return json.Marshal(in)
+}*/
+
 type Property struct {
 	IdName
 	Description
@@ -56,13 +61,44 @@ type Property struct {
 type RequireProperty int
 
 const (
-	CATALOG  RequireProperty = iota
+	CATALOG RequireProperty = iota
 	DOCUMENT
 	OFFER
 )
 
 type Description struct {
 	Value string `xml:"Описание"`
+}
+
+type Catalog struct {
+	IdName
+	Classifier Classifier
+	Owner      Owner
+	Products   []Product `xml:"Товары>Товар"`
+}
+
+type Product struct {
+	IdName
+	Description
+	BarCode  string  `xml:"Штрихкод"`
+	Article  string  `xml:"Артикул"`
+	Unit     Unit    `xml:"БазоваяЕдиница"`
+	FullName string  `xml:"Описание"`
+	Groups   []Group `xml:"Группы"`
+	/*	Image        url.URL
+		Properties   []IdValue
+		Taxes        []Tax
+		Requisites   []Requisite
+		Country      string
+		Brand        string
+		OwnerBrand   string
+		Manufacturer Contractor
+		Excises      []Excise*/
+}
+
+type Unit struct {
+	Name string `xml:"НаименованиеПолное"`
+	Code int    `xml:"Код"`
 }
 
 func NewParser204(storage commerceml.Storage) parser {
@@ -81,6 +117,10 @@ func (p parser) Parse(data []byte) (err error) {
 
 	for _, i := range cml.Classifier.Properties {
 		p.CreateProperty(i)
+	}
+
+	for _, i := range cml.Catalog.Products {
+		p.CreateProduct(i)
 	}
 
 	return
@@ -112,6 +152,31 @@ func (p parser) CreateProperty(property Property) (err error) {
 			Name: property.Name,
 		},
 		Type: commerceml.Property{}.Type.Get(property.Type),
+	})
+
+	return
+}
+
+func (p parser) CreateProduct(product Product) (err error) {
+	var groups []commerceml.Group
+	for _, i := range product.Groups {
+		g := commerceml.Group{
+			IdName: commerceml.IdName{
+				Id: i.Id,
+			},
+		}
+		groups = append(groups, g)
+	}
+
+	err = p.storage.CreateProduct(commerceml.Product{
+		IdName: commerceml.IdName{
+			Id:   product.Id,
+			Name: product.Name,
+		},
+		Description: commerceml.Description{
+			Value: product.Description.Value,
+		},
+		Groups: groups,
 	})
 
 	return
