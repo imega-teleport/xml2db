@@ -142,6 +142,7 @@ func (tx *Tx) CreateProduct(account string, product commerceml.Product) (err err
 			return
 		}
 	}()
+
 	var groups []struct {
 		ID string `json:"id"`
 	}
@@ -157,6 +158,7 @@ func (tx *Tx) CreateProduct(account string, product commerceml.Product) (err err
 	if err != nil {
 		return
 	}
+
 	_, err = stmt.Exec(account, product.Id, product.Name, groupsJson)
 	if err != nil {
 		return
