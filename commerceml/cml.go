@@ -3,7 +3,6 @@ package commerceml
 import (
 	"encoding/xml"
 	"net/url"
-	"strconv"
 )
 
 type Parser interface {
@@ -181,26 +180,7 @@ type Requisite struct {
 
 type Tax struct {
 	Name string `xml:"Наименование"`
-	Rate Rate   `xml:"Ставка"`
-}
-
-type Rate int
-
-func (r *Rate) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
-	var content string
-	if err := d.DecodeElement(&content, &start); err != nil {
-		return err
-	}
-	if content == "Без налога" {
-		*r = Rate(0)
-	} else {
-		i, err := strconv.Atoi(content)
-		if err != nil {
-			return err
-		}
-		*r = Rate(i)
-	}
-	return nil
+	Rate string `xml:"Ставка"`
 }
 
 type Unit struct {
@@ -212,5 +192,5 @@ type Component struct {
 	Product      Product `xml:"Товар"`
 	CatalogID    string  `xml:"ИдКаталога"`
 	ClassifierID string  `xml:"ИдКлассификатора"`
-	Amount       int     `xml:"КоличествоТип"`
+	Quantity     int     `xml:"КоличествоТип"`
 }

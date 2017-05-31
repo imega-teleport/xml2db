@@ -31,7 +31,13 @@ func (p parser) Parse(data []byte) (err error) {
 	for _, i := range cml.Catalog.Products {
 		p.CreateProduct(i)
 	}
+	p.CreateProducts(cml.Catalog.Products)
 
+	return
+}
+
+func (p parser) CreateProducts(products []commerceml.Product) (err error) {
+	err = p.storage.CreateProducts(products)
 	return
 }
 
@@ -56,8 +62,6 @@ func (p parser) CreateProperty(property commerceml.Property) (err error) {
 }
 
 func (p parser) CreateProduct(product commerceml.Product) (err error) {
-	err = p.storage.CreateProduct(product)
-
 	for _, i := range product.Groups {
 		err = p.storage.CreateProductGroup(product.Id, i)
 	}
@@ -77,16 +81,20 @@ func (p parser) CreateProduct(product commerceml.Product) (err error) {
 		err = p.storage.CreateProductRequisite(product.Id, i)
 	}
 
-	err = p.storage.CreateProductContractor(product.Id, product.Manufacturer)
+	if len(product.Manufacturer.Id) > 0 {
+		err = p.storage.CreateProductContractor(product.Id, product.Manufacturer)
+	}
 
-	err = p.storage.CreateProductContractor(product.Id, product.OwnerBrand)
+	if len(product.OwnerBrand.Id) > 0 {
+		err = p.storage.CreateProductContractor(product.Id, product.OwnerBrand)
+	}
 
 	for _, i := range product.Excises {
 		err = p.storage.CreateProductExcise(product.Id, i)
 	}
 
 	for _, i := range product.Components {
-		err = p.storage.CreateProductComponent(product.Id, i)
+		err = p.storage.CreateProductComponent(i)
 	}
 
 	return

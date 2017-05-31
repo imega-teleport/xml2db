@@ -26,15 +26,8 @@ CREATE TABLE products (
   barcode      VARCHAR(250),
   article      VARCHAR(250),
   full_name    VARCHAR(3000),
-  groups       TEXT,
-  properties   TEXT,
-  taxes        TEXT,
-  requisites   TEXT,
   country      VARCHAR(250),
   brand        VARCHAR(250),
-  owner_brand  VARCHAR(250),
-  manufacturer VARCHAR(36),
-  excises      TEXT,
   KEY record(id)
 );
 
@@ -49,27 +42,26 @@ CREATE TABLE products_properties (
 DROP TABLE IF EXISTS products_taxes;
 CREATE TABLE products_taxes (
   parent_id VARCHAR(36) NOT NULL,
-  id        VARCHAR(36) NOT NULL,
   name      VARCHAR(36),
-  rate      FLOAT,
-  KEY record(parent_id, id)
+  rate      VARCHAR(20),
+  KEY record(parent_id)
 );
 
 DROP TABLE IF EXISTS products_requisites;
 CREATE TABLE products_requisites (
   parent_id VARCHAR(36) NOT NULL,
-  id        VARCHAR(36) NOT NULL,
   name      VARCHAR(250),
   value     VARCHAR(250),
-  KEY record(parent_id, id)
+  KEY record(parent_id)
 );
 
 DROP TABLE IF EXISTS products_excises;
 CREATE TABLE products_excises (
   parent_id VARCHAR(36) NOT NULL,
-  id        VARCHAR(36) NOT NULL,
   name      VARCHAR(250),
-  KEY record(parent_id, id)
+  sum       FLOAT,
+  currency  CHAR(3),
+  KEY record(parent_id)
 );
 
 DROP TABLE IF EXISTS products_images;
@@ -83,5 +75,24 @@ DROP TABLE IF EXISTS products_groups;
 CREATE TABLE products_groups (
   parent_id VARCHAR(36) NOT NULL,
   id        VARCHAR(36) NOT NULL,
+  KEY record(parent_id)
+);
+
+DROP TABLE IF EXISTS products_contractor;
+CREATE TABLE products_contractor (
+  parent_id VARCHAR(36) NOT NULL,
+  id        VARCHAR(36) NOT NULL,
+  name      VARCHAR(250),
+  title     VARCHAR(3000),
+  full_name VARCHAR(3000),
+  KEY record(parent_id, id)
+);
+
+DROP TABLE IF EXISTS products_component;
+CREATE TABLE products_component (
+  parent_id     VARCHAR(36) NOT NULL,
+  catalog_id    VARCHAR(36) NOT NULL,
+  classifier_id VARCHAR(36) NOT NULL,
+  quantity      SMALLINT,
   KEY record(parent_id)
 );

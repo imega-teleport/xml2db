@@ -2,7 +2,6 @@ package mysql
 
 import (
 	"database/sql"
-	"encoding/json"
 
 	"github.com/imega-teleport/xml2db/commerceml"
 )
@@ -125,22 +124,87 @@ func (s storage) CreateProductProperty(parentID string, property commerceml.IdVa
 }
 
 func (s storage) CreateProductTax(parentID string, tax commerceml.Tax) (err error) {
+	tx, err := s.db.Begin()
+	if err != nil {
+		return
+	}
+	defer func() {
+		if err != nil {
+			tx.Rollback()
+			return
+		}
+		err = tx.Commit()
+	}()
+
+	err = tx.CreateProductTax(parentID, tax)
 	return
 }
 
 func (s storage) CreateProductRequisite(parentID string, requisite commerceml.Requisite) (err error) {
+	tx, err := s.db.Begin()
+	if err != nil {
+		return
+	}
+	defer func() {
+		if err != nil {
+			tx.Rollback()
+			return
+		}
+		err = tx.Commit()
+	}()
+
+	err = tx.CreateProductRequisite(parentID, requisite)
 	return
 }
 
 func (s storage) CreateProductContractor(parentID string, contractor commerceml.Contractor) (err error) {
+	tx, err := s.db.Begin()
+	if err != nil {
+		return
+	}
+	defer func() {
+		if err != nil {
+			tx.Rollback()
+			return
+		}
+		err = tx.Commit()
+	}()
+
+	err = tx.CreateProductContractor(parentID, contractor)
 	return
 }
 
 func (s storage) CreateProductExcise(parentID string, excise commerceml.Excise) (err error) {
+	tx, err := s.db.Begin()
+	if err != nil {
+		return
+	}
+	defer func() {
+		if err != nil {
+			tx.Rollback()
+			return
+		}
+		err = tx.Commit()
+	}()
+
+	err = tx.CreateProductExcise(parentID, excise)
 	return
 }
 
-func (s storage) CreateProductComponent(parentID string, component commerceml.Component) (err error) {
+func (s storage) CreateProductComponent(component commerceml.Component) (err error) {
+	tx, err := s.db.Begin()
+	if err != nil {
+		return
+	}
+	defer func() {
+		if err != nil {
+			tx.Rollback()
+			return
+		}
+		err = tx.Commit()
+	}()
+
+	err = tx.CreateProductComponent(component)
 	return
 }
 
@@ -201,7 +265,7 @@ func (tx *Tx) CreateProperty(property commerceml.Property) (err error) {
 }
 
 func (tx *Tx) CreateProduct(product commerceml.Product) (err error) {
-	stmt, err := tx.Prepare("INSERT products(id,name,groups) VALUES (?,?,?)")
+	stmt, err := tx.Prepare("INSERT products(id, name, description, barcode, article, full_name, country, brand) VALUES (?,?,?,?,?,?,?,?)")
 	if err != nil {
 		return
 	}
@@ -212,23 +276,7 @@ func (tx *Tx) CreateProduct(product commerceml.Product) (err error) {
 		}
 	}()
 
-	var groups []struct {
-		ID string `json:"id"`
-	}
-	for _, i := range product.Groups {
-		s := struct {
-			ID string `json:"id"`
-		}{
-			ID: i.Id,
-		}
-		groups = append(groups, s)
-	}
-	groupsJson, err := json.Marshal(groups)
-	if err != nil {
-		return
-	}
-
-	_, err = stmt.Exec(product.Id, product.Name, groupsJson)
+	_, err = stmt.Exec(product.Id, product.Name, product.Description.Value, product.BarCode, product.Article, product.FullName, product.Country, product.Brand)
 	if err != nil {
 		return
 	}
@@ -293,5 +341,127 @@ func (tx *Tx) CreateProductProperty(parentID string, property commerceml.IdValue
 		return
 	}
 
+	return
+}
+
+func (tx *Tx) CreateProductTax(parentID string, tax commerceml.Tax) (err error) {
+	stmt, err := tx.Prepare("INSERT products_taxes(parent_id,name,rate) VALUES (?,?,?)")
+	if err != nil {
+		return
+	}
+	defer func() {
+		err = stmt.Close()
+		if err != nil {
+			return
+		}
+	}()
+
+	_, err = stmt.Exec(parentID, tax.Name, tax.Rate)
+	if err != nil {
+		return
+	}
+
+	return
+}
+
+func (tx *Tx) CreateProductRequisite(parentID string, requisite commerceml.Requisite) (err error) {
+	stmt, err := tx.Prepare("INSERT products_requisites(parent_id,name,value) VALUES (?,?,?)")
+	if err != nil {
+		return
+	}
+	defer func() {
+		err = stmt.Close()
+		if err != nil {
+			return
+		}
+	}()
+
+	_, err = stmt.Exec(parentID, requisite.Name, requisite.Value)
+	if err != nil {
+		return
+	}
+
+	return
+}
+
+func (tx *Tx) CreateProductContractor(parentID string, contractor commerceml.Contractor) (err error) {
+	stmt, err := tx.Prepare("INSERT products_contractor(parent_id,id,name,title,full_name) VALUES (?,?,?,?,?)")
+	if err != nil {
+		return
+	}
+	defer func() {
+		err = stmt.Close()
+		if err != nil {
+			return
+		}
+	}()
+
+	_, err = stmt.Exec(parentID, contractor.Id, contractor.Name, contractor.Title, contractor.FullName)
+	if err != nil {
+		return
+	}
+
+	return
+}
+
+func (tx *Tx) CreateProductExcise(parentID string, excise commerceml.Excise) (err error) {
+	stmt, err := tx.Prepare("INSERT products_excises(parent_id, name, sum, currency) VALUES (?,?,?,?)")
+	if err != nil {
+		return
+	}
+	defer func() {
+		err = stmt.Close()
+		if err != nil {
+			return
+		}
+	}()
+
+	_, err = stmt.Exec(parentID, excise.Name, excise.Sum, excise.Currency)
+	if err != nil {
+		return
+	}
+
+	return
+}
+
+func (tx *Tx) CreateProductComponent(component commerceml.Component) (err error) {
+	stmt, err := tx.Prepare("INSERT products_component(parent_id,	catalog_id, classifier_id, quantity) VALUES (?,?,?,?)")
+	if err != nil {
+		return
+	}
+	defer func() {
+		err = stmt.Close()
+		if err != nil {
+			return
+		}
+	}()
+
+	_, err = stmt.Exec(component.Product.Id, component.CatalogID, component.ClassifierID, component.Quantity)
+	if err != nil {
+		return
+	}
+
+	return
+}
+
+func (s storage) CreateProducts(products []commerceml.Product) (err error) {
+	tx, err := s.db.Begin()
+	if err != nil {
+		return
+	}
+	defer func() {
+		if err != nil {
+			tx.Rollback()
+			return
+		}
+		err = tx.Commit()
+	}()
+
+	for _, i := range products {
+		err = tx.CreateProduct(i)
+		if err != nil {
+			return
+		}
+	}
 	return
 }
