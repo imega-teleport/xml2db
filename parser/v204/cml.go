@@ -20,13 +20,13 @@ func (p parser) Parse(data []byte) (err error) {
 	cml := &commerceml.CommerceML{}
 	err = xml.Unmarshal(data, cml)
 
-	/*for _, g := range cml.Classifier.Groups {
+	for _, g := range cml.Classifier.Groups {
 		p.CreateGroup("", g)
 	}
 
 	for _, i := range cml.Classifier.Properties {
 		p.CreateProperty(i)
-	}*/
+	}
 
 	for _, i := range cml.Catalog.Products {
 		p.CreateProduct(i)
@@ -36,12 +36,7 @@ func (p parser) Parse(data []byte) (err error) {
 }
 
 func (p parser) CreateGroup(parentId string, group commerceml.Group) (err error) {
-	err = p.storage.CreateGroup(parentId, commerceml.Group{
-		IdName: commerceml.IdName{
-			Id:   group.Id,
-			Name: group.Name,
-		},
-	})
+	err = p.storage.CreateGroup(parentId, group)
 
 	if len(group.Groups) == 0 {
 		return
@@ -55,13 +50,7 @@ func (p parser) CreateGroup(parentId string, group commerceml.Group) (err error)
 }
 
 func (p parser) CreateProperty(property commerceml.Property) (err error) {
-	err = p.storage.CreateProperty(commerceml.Property{
-		IdName: commerceml.IdName{
-			Id:   property.Id,
-			Name: property.Name,
-		},
-		Type: property.Type,
-	})
+	err = p.storage.CreateProperty(property)
 
 	return
 }

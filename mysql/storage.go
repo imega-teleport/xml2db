@@ -108,6 +108,19 @@ func (s storage) CreateProductImage(parentID string, image commerceml.Image) (er
 }
 
 func (s storage) CreateProductProperty(parentID string, property commerceml.IdValue) (err error) {
+	tx, err := s.db.Begin()
+	if err != nil {
+		return
+	}
+	defer func() {
+		if err != nil {
+			tx.Rollback()
+			return
+		}
+		err = tx.Commit()
+	}()
+
+	err = tx.CreateProductProperty(parentID, property)
 	return
 }
 
@@ -256,6 +269,26 @@ func (tx *Tx) CreateProductImage(parentID string, image commerceml.Image) (err e
 	}()
 
 	_, err = stmt.Exec(parentID, image.String())
+	if err != nil {
+		return
+	}
+
+	return
+}
+
+func (tx *Tx) CreateProductProperty(parentID string, property commerceml.IdValue) (err error) {
+	stmt, err := tx.Prepare("INSERT products_properties(parent_id,id,value) VALUES (?,?,?)")
+	if err != nil {
+		return
+	}
+	defer func() {
+		err = stmt.Close()
+		if err != nil {
+			return
+		}
+	}()
+
+	_, err = stmt.Exec(parentID, property.Id, property.Value)
 	if err != nil {
 		return
 	}
