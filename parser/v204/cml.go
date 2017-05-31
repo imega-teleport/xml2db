@@ -67,27 +67,38 @@ func (p parser) CreateProperty(property commerceml.Property) (err error) {
 }
 
 func (p parser) CreateProduct(product commerceml.Product) (err error) {
-	var groups []commerceml.Group
+	err = p.storage.CreateProduct(product)
+
 	for _, i := range product.Groups {
-		g := commerceml.Group{
-			IdName: commerceml.IdName{
-				Id: i.Id,
-			},
-		}
-		groups = append(groups, g)
+		err = p.storage.CreateProductGroup(product.Id, i)
 	}
 
-	err = p.storage.CreateProduct(commerceml.Product{
-		IdName: commerceml.IdName{
-			Id:   product.Id,
-			Name: product.Name,
-		},
-		Description: commerceml.Description{
-			Value: product.Description.Value,
-		},
-		Groups: groups,
-		Images: product.Images,
-	})
+	for _, i := range product.Images {
+		err = p.storage.CreateProductImage(product.Id, i)
+	}
+
+	for _, i := range product.Properties {
+		err = p.storage.CreateProductProperty(product.Id, i)
+	}
+
+	for _, i := range product.Taxes {
+		err = p.storage.CreateProductTax(product.Id, i)
+	}
+	for _, i := range product.Requisites {
+		err = p.storage.CreateProductRequisite(product.Id, i)
+	}
+
+	err = p.storage.CreateProductContractor(product.Id, product.Manufacturer)
+
+	err = p.storage.CreateProductContractor(product.Id, product.OwnerBrand)
+
+	for _, i := range product.Excises {
+		err = p.storage.CreateProductExcise(product.Id, i)
+	}
+
+	for _, i := range product.Components {
+		err = p.storage.CreateProductComponent(product.Id, i)
+	}
 
 	return
 }
