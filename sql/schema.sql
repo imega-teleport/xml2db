@@ -12,9 +12,9 @@ CREATE TABLE groups (
 
 DROP TABLE IF EXISTS properties;
 CREATE TABLE properties (
-  id        VARCHAR(36) NOT NULL,
-  name      VARCHAR(3000),
-  type      VARCHAR(3000),
+  id   VARCHAR(36) NOT NULL,
+  name VARCHAR(3000),
+  type VARCHAR(3000),
   KEY record(id)
 );
 
@@ -76,5 +76,12 @@ DROP TABLE IF EXISTS products_images;
 CREATE TABLE products_images (
   parent_id VARCHAR(36) NOT NULL,
   url       VARCHAR(250),
+  KEY record(parent_id)
+);
+
+DROP TABLE IF EXISTS products_groups;
+CREATE TABLE products_groups (
+  parent_id VARCHAR(36) NOT NULL,
+  id        VARCHAR(36) NOT NULL,
   KEY record(parent_id)
 );
