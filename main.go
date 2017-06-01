@@ -59,4 +59,30 @@ func main() {
         fmt.Printf("error: %v", err)
         os.Exit(1)
     }
+
+	xmlFile, err = os.Open("offers.xml")
+	if err != nil {
+		fmt.Printf("error: %v", err)
+		os.Exit(1)
+	}
+	defer xmlFile.Close()
+
+	stat, err = xmlFile.Stat()
+	if err != nil {
+		fmt.Printf("error: %v", err)
+		os.Exit(1)
+	}
+
+	data = make([]byte, stat.Size())
+	_, err = xmlFile.Read(data)
+	if err != nil {
+		fmt.Printf("error: %v", err)
+		os.Exit(1)
+	}
+
+	err = parser.ParseBundling(data)
+	if err != nil {
+		fmt.Printf("error: %v", err)
+		os.Exit(1)
+	}
 }

@@ -208,6 +208,77 @@ func (s storage) CreateProductComponent(component commerceml.Component) (err err
 	return
 }
 
+func (s storage) CreateBundling(bundling commerceml.Bundling) (err error) {
+	tx, err := s.db.Begin()
+	if err != nil {
+		return
+	}
+	defer func() {
+		if err != nil {
+			tx.Rollback()
+			return
+		}
+		err = tx.Commit()
+	}()
+
+	err = tx.CreateBundling(bundling)
+	return
+}
+
+func (s storage) CreateOffers(bundling commerceml.Bundling, offers []commerceml.Offer) (err error) {
+	tx, err := s.db.Begin()
+	if err != nil {
+		return
+	}
+	defer func() {
+		if err != nil {
+			tx.Rollback()
+			return
+		}
+		err = tx.Commit()
+	}()
+	for _, i := range offers {
+		err = tx.CreateOffer(bundling.Id, i)
+	}
+	return
+}
+
+func (s storage) CreatePricesTypes(bundling commerceml.Bundling, pricesTypes []commerceml.PriceType) (err error) {
+	tx, err := s.db.Begin()
+	if err != nil {
+		return
+	}
+	defer func() {
+		if err != nil {
+			tx.Rollback()
+			return
+		}
+		err = tx.Commit()
+	}()
+	for _, i := range pricesTypes {
+		err = tx.CreatePriceType(bundling.Id, i)
+	}
+	return
+}
+
+func (s storage) CreatePrices(offer commerceml.Offer, prices []commerceml.Price) (err error) {
+	tx, err := s.db.Begin()
+	if err != nil {
+		return
+	}
+	defer func() {
+		if err != nil {
+			tx.Rollback()
+			return
+		}
+		err = tx.Commit()
+	}()
+	for _, i := range prices {
+		err = tx.CreatePrice(offer.Id, i)
+	}
+	return
+}
+
 type db struct {
 	*sql.DB
 }
@@ -463,5 +534,85 @@ func (s storage) CreateProducts(products []commerceml.Product) (err error) {
 			return
 		}
 	}
+	return
+}
+
+func (tx *Tx) CreateBundling(bundling commerceml.Bundling) (err error) {
+	stmt, err := tx.Prepare("INSERT bundling(id, name, catalog_id, classifier_id) VALUES (?,?,?,?)")
+	if err != nil {
+		return
+	}
+	defer func() {
+		err = stmt.Close()
+		if err != nil {
+			return
+		}
+	}()
+
+	_, err = stmt.Exec(bundling.Id, bundling.Name, bundling.CatalogID, bundling.ClassifierID)
+	if err != nil {
+		return
+	}
+
+	return
+}
+
+func (tx *Tx) CreateOffer(parentID string, offer commerceml.Offer) (err error) {
+	stmt, err := tx.Prepare("INSERT bundling_offers(parent_id, id, name, base_unit, base_unit_name, base_unit_code, base_unit_global, quantity) VALUES (?,?,?,?,?,?,?,?)")
+	if err != nil {
+		return
+	}
+	defer func() {
+		err = stmt.Close()
+		if err != nil {
+			return
+		}
+	}()
+
+	_, err = stmt.Exec(parentID, offer.Id, offer.Name, offer.BaseUnit, offer.BaseUnitName, offer.BaseUnitCode, offer.BaseUnitGlobal, offer.Quantity)
+	if err != nil {
+		return
+	}
+
+	return
+}
+
+func (tx *Tx) CreatePriceType(parentID string, priceType commerceml.PriceType) (err error) {
+	stmt, err := tx.Prepare("INSERT bundling_prices_types(parent_id) VALUES (?)")
+	if err != nil {
+		return
+	}
+	defer func() {
+		err = stmt.Close()
+		if err != nil {
+			return
+		}
+	}()
+
+	_, err = stmt.Exec(parentID)
+	if err != nil {
+		return
+	}
+
+	return
+}
+
+func (tx *Tx) CreatePrice(parentID string, price commerceml.Price) (err error) {
+	stmt, err := tx.Prepare("INSERT bundling_offers_prices(parent_id, display, price_type_id, unit_price, currency, unit, coefficient) VALUES (?,?,?,?,?,?,?)")
+	if err != nil {
+		return
+	}
+	defer func() {
+		err = stmt.Close()
+		if err != nil {
+			return
+		}
+	}()
+
+	_, err = stmt.Exec(parentID, price.Display, price.PriceTypeID, price.UnitPrice, price.Currency, price.Unit, price.Coefficient)
+	if err != nil {
+		return
+	}
+
 	return
 }

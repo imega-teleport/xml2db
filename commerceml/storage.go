@@ -14,4 +14,9 @@ type Storage interface {
 	CreateProductContractor(parentID string, contractor Contractor) (err error)
 	CreateProductExcise(parentID string, excise Excise) (err error)
 	CreateProductComponent(component Component) (err error)
+
+	CreateBundling(bundling Bundling) (err error)
+	CreateOffers(bundling Bundling, offers []Offer) (err error)
+	CreatePricesTypes(bundling Bundling, pricesTypes []PriceType) (err error)
+	CreatePrices(offer Offer, prices []Price) (err error)
 }

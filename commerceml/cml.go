@@ -7,6 +7,7 @@ import (
 
 type Parser interface {
 	Parse(data []byte) (err error)
+	ParseBundling(data []byte) (err error)
 }
 
 type CommerceML struct {
@@ -14,6 +15,7 @@ type CommerceML struct {
 	Version      string     `xml:"ВерсияСхемы,attr"`
 	Classifier   Classifier `xml:"Классификатор"`
 	Catalog      Catalog    `xml:"Каталог"`
+	Bundling     Bundling   `xml:"ПакетПредложений"`
 }
 
 type Group struct {
@@ -193,4 +195,32 @@ type Component struct {
 	CatalogID    string  `xml:"ИдКаталога"`
 	ClassifierID string  `xml:"ИдКлассификатора"`
 	Quantity     int     `xml:"КоличествоТип"`
+}
+
+type Bundling struct {
+	IdName
+	Owner
+	CatalogID    string      `xml:"ИдКаталога"`
+	ClassifierID string      `xml:"ИдКлассификатора"`
+	PriceTypes   []PriceType `xml:"ТипыЦен"`
+	Offers       []Offer     `xml:"Предложения>Предложение"`
+}
+
+type Offer struct {
+	IdName
+	BaseUnit       string  `xml:"БазоваяЕдиница"`
+	BaseUnitCode   string  `xml:"Код,attr"`
+	BaseUnitName   string  `xml:"НаименованиеПолное,attr"`
+	BaseUnitGlobal string  `xml:"МеждународноеСокращение,attr"`
+	Prices         []Price `xml:"Цены>Цена"`
+	Quantity       float32 `xml:"Количество"`
+}
+
+type Price struct {
+	Display     string  `xml:"Представление"`
+	PriceTypeID string  `xml:"ИдТипаЦены"`
+	UnitPrice   float32 `xml:"ЦенаЗаЕдиницу"`
+	Currency    string  `xml:"Валюта"`
+	Unit        string  `xml:"Единица"`
+	Coefficient int     `xml:"Коэффициент"`
 }

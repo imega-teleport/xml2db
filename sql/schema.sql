@@ -20,14 +20,14 @@ CREATE TABLE properties (
 
 DROP TABLE IF EXISTS products;
 CREATE TABLE products (
-  id           VARCHAR(36) NOT NULL,
-  name         VARCHAR(3000),
-  description  TEXT,
-  barcode      VARCHAR(250),
-  article      VARCHAR(250),
-  full_name    VARCHAR(3000),
-  country      VARCHAR(250),
-  brand        VARCHAR(250),
+  id          VARCHAR(36) NOT NULL,
+  name        VARCHAR(3000),
+  description TEXT,
+  barcode     VARCHAR(250),
+  article     VARCHAR(250),
+  full_name   VARCHAR(3000),
+  country     VARCHAR(250),
+  brand       VARCHAR(250),
   KEY record(id)
 );
 
@@ -94,5 +94,45 @@ CREATE TABLE products_component (
   catalog_id    VARCHAR(36) NOT NULL,
   classifier_id VARCHAR(36) NOT NULL,
   quantity      SMALLINT,
+  KEY record(parent_id)
+);
+
+DROP TABLE IF EXISTS bundling;
+CREATE TABLE bundling (
+  id            VARCHAR(36) NOT NULL,
+  name          VARCHAR(3000),
+  catalog_id    VARCHAR(36),
+  classifier_id VARCHAR(36),
+  KEY record(id)
+);
+
+DROP TABLE IF EXISTS bundling_offers;
+CREATE TABLE bundling_offers (
+  parent_id        VARCHAR(36) NOT NULL,
+  id               VARCHAR(36) NOT NULL,
+  name             VARCHAR(3000),
+  base_unit        VARCHAR(200),
+  base_unit_name   VARCHAR(200),
+  base_unit_code   VARCHAR(200),
+  base_unit_global VARCHAR(200),
+  quantity         FLOAT,
+  KEY record(parent_id, id)
+);
+
+DROP TABLE IF EXISTS bundling_prices_types;
+CREATE TABLE bundling_prices_types (
+  parent_id VARCHAR(36) NOT NULL,
+  KEY record(parent_id)
+);
+
+DROP TABLE IF EXISTS bundling_offers_prices;
+CREATE TABLE bundling_offers_prices (
+  parent_id     VARCHAR(36) NOT NULL,
+  display       VARCHAR(200),
+  price_type_id VARCHAR(36) NOT NULL,
+  unit_price    VARCHAR(50),
+  currency      CHAR(3),
+  unit          VARCHAR(50),
+  coefficient   SMALLINT,
   KEY record(parent_id)
 );

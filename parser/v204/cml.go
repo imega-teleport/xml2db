@@ -99,3 +99,27 @@ func (p parser) CreateProduct(product commerceml.Product) (err error) {
 
 	return
 }
+
+func (p parser) ParseBundling(data []byte) (err error) {
+	cml := &commerceml.CommerceML{}
+	err = xml.Unmarshal(data, cml)
+
+	err = p.storage.CreateBundling(cml.Bundling)
+	/*if len(cml.Bundling.Owner.Id) > 0 {
+		err = p.storage.CreateProductContractor(product.Id, product.Manufacturer)
+	}*/
+	err = p.storage.CreatePricesTypes(cml.Bundling, cml.Bundling.PriceTypes)
+	err = p.CreateOffers(cml.Bundling, cml.Bundling.Offers)
+
+	return
+}
+
+func (p parser) CreateOffers(bundling commerceml.Bundling, offers []commerceml.Offer) (err error) {
+	err = p.storage.CreateOffers(bundling, offers)
+
+	for _, i := range offers {
+		p.storage.CreatePrices(i, i.Prices)
+	}
+
+	return
+}
