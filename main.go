@@ -86,8 +86,10 @@ func main() {
 	storage := mysql.NewStorage(db)
 	parser := v204.NewParser204(storage)
 	if fileImport == true {
+		err = storage.FulfillTask("store", true);
 		err = parser.Parse(data)
 	} else {
+		err = storage.FulfillTask("offer", true);
 		err = parser.ParseBundling(data)
 	}
 	if err != nil {

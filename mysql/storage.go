@@ -16,6 +16,24 @@ func NewStorage(sqlDB *sql.DB) *storage {
 	}
 }
 
+func (s storage) FulfillTask(name string, finish bool) (err error) {
+	tx, err := s.db.Begin()
+	if err != nil {
+		return
+	}
+	defer func() {
+		if err != nil {
+			tx.Rollback()
+			return
+		}
+		err = tx.Commit()
+	}()
+
+	err = tx.FulfillTask(name, finish)
+
+	return
+}
+
 func (s storage) CreateGroup(parentID string, group commerceml.Group) (err error) {
 	tx, err := s.db.Begin()
 	if err != nil {
@@ -293,6 +311,26 @@ func (d db) Begin() (*Tx, error) {
 
 type Tx struct {
 	*sql.Tx
+}
+
+func (tx *Tx) FulfillTask(name string, finish bool) (err error) {
+	stmt, err := tx.Prepare("INSERT tasks(name,val) VALUES (?,?)")
+	if err != nil {
+		return
+	}
+	defer func() {
+		err = stmt.Close()
+		if err != nil {
+			return
+		}
+	}()
+
+	_, err = stmt.Exec(name, finish)
+	if err != nil {
+		return
+	}
+
+	return
 }
 
 func (tx *Tx) CreateGroup(parentID string, group commerceml.Group) (err error) {
