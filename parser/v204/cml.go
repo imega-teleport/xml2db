@@ -43,6 +43,9 @@ func (p parser) CreateProducts(products []commerceml.Product) (err error) {
 
 func (p parser) CreateGroup(parentId string, group commerceml.Group) (err error) {
 	err = p.storage.CreateGroup(parentId, group)
+	if err != nil {
+		return
+	}
 
 	if len(group.Groups) == 0 {
 		return
@@ -50,6 +53,9 @@ func (p parser) CreateGroup(parentId string, group commerceml.Group) (err error)
 
 	for _, g := range group.Groups {
 		err = p.CreateGroup(group.Id, g)
+		if err != nil {
+			return
+		}
 	}
 
 	return

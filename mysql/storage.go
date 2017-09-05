@@ -394,7 +394,7 @@ func (tx *Tx) CreateProduct(product commerceml.Product) (err error) {
 }
 
 func (tx *Tx) CreateProductGroup(parentID string, group commerceml.Group) (err error) {
-	stmt, err := tx.Prepare("INSERT products_groups(parent_id,id) VALUES (?,?)")
+	stmt, err := tx.Prepare("INSERT products_groups(product_id,group_id) VALUES (?,?)")
 	if err != nil {
 		return
 	}
