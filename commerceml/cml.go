@@ -217,10 +217,10 @@ type Offer struct {
 }
 
 type Price struct {
-	Display     string  `xml:"Представление"`
-	PriceTypeID string  `xml:"ИдТипаЦены"`
-	UnitPrice   float32 `xml:"ЦенаЗаЕдиницу"`
-	Currency    string  `xml:"Валюта"`
-	Unit        string  `xml:"Единица"`
-	Coefficient int     `xml:"Коэффициент"`
+	Display     string `xml:"Представление"`
+	PriceTypeID string `xml:"ИдТипаЦены"`
+	UnitPrice   string `xml:"ЦенаЗаЕдиницу"`
+	Currency    string `xml:"Валюта"`
+	Unit        string `xml:"Единица"`
+	Coefficient int    `xml:"Коэффициент"`
 }
