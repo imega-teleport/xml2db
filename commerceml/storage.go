@@ -7,7 +7,7 @@ type Storage interface {
 	CreateProduct(product Product) (err error)
 	CreateProducts(products []Product) (err error)
 	CreateProductGroup(parentID string, group Group) (err error)
-	CreateProductImage(parentID string, image Image) (err error)
+	CreateProductImage(parentID string, image Image, k int) (err error)
 	CreateProductProperty(parentID string, property IdValue) (err error)
 	CreateProductTax(parentID string, tax Tax) (err error)
 	CreateProductRequisite(parentID string, requisite Requisite) (err error)

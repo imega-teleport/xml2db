@@ -106,7 +106,7 @@ func (s storage) CreateProductGroup(parentID string, group commerceml.Group) (er
 	return
 }
 
-func (s storage) CreateProductImage(parentID string, image commerceml.Image) (err error) {
+func (s storage) CreateProductImage(parentID string, image commerceml.Image, idx int) (err error) {
 	tx, err := s.db.Begin()
 	if err != nil {
 		return
@@ -119,7 +119,7 @@ func (s storage) CreateProductImage(parentID string, image commerceml.Image) (er
 		err = tx.Commit()
 	}()
 
-	err = tx.CreateProductImage(parentID, image)
+	err = tx.CreateProductImage(parentID, image, idx)
 
 	return
 }
@@ -413,8 +413,8 @@ func (tx *Tx) CreateProductGroup(parentID string, group commerceml.Group) (err e
 	return
 }
 
-func (tx *Tx) CreateProductImage(parentID string, image commerceml.Image) (err error) {
-	stmt, err := tx.Prepare("INSERT products_images(parent_id,url) VALUES (?,?)")
+func (tx *Tx) CreateProductImage(parentID string, image commerceml.Image, idx int) (err error) {
+	stmt, err := tx.Prepare("INSERT products_images(parent_id,entity_id,url) VALUES (?,?,?)")
 	if err != nil {
 		return
 	}
@@ -425,7 +425,7 @@ func (tx *Tx) CreateProductImage(parentID string, image commerceml.Image) (err e
 		}
 	}()
 
-	_, err = stmt.Exec(parentID, image.String())
+	_, err = stmt.Exec(parentID, idx, image.String())
 	if err != nil {
 		return
 	}

@@ -72,8 +72,8 @@ func (p parser) CreateProduct(product commerceml.Product) (err error) {
 		err = p.storage.CreateProductGroup(product.Id, i)
 	}
 
-	for _, i := range product.Images {
-		err = p.storage.CreateProductImage(product.Id, i)
+	for k, i := range product.Images {
+		err = p.storage.CreateProductImage(product.Id, i, k)
 	}
 
 	for _, i := range product.Properties {
